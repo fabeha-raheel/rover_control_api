@@ -13,6 +13,8 @@ class Rover():
         self._throttle_channel = 1
         self._steering_channel = 0
 
+        self.speeds = ["SLOW", "MEDIUM", "FAST"]
+
     def arm(self):
         rospy.wait_for_service('/mavros/cmd/arming')
         try:
@@ -86,3 +88,18 @@ class Rover():
         msg.channels[self._throttle_channel] = 1500
 
         self.rc_override.publish(msg)
+
+if __name__ == '__main__':
+
+    myRover = Rover()
+
+    print("Arming Rover...")
+    myRover.arm()
+    while True:
+        print("Moving Forward")
+        try:
+            myRover.move_forward(speed=myRover.speeds[2])
+        except KeyboardInterrupt:
+            print("Exiting...")
+            myRover.stop()
+            time.sleep(1)
