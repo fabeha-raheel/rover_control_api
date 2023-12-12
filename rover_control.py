@@ -7,8 +7,8 @@ class Rover():
 
     def __init__(self) -> None:
 
-        rospy.init_node('control_test', anonymous=True)
-        self.rc_override = rospy.Publisher('mavros/rc/override', OverrideRCIn)
+        # rospy.init_node('control_test', anonymous=True)
+        # self.rc_override = rospy.Publisher('mavros/rc/override', OverrideRCIn)
 
         self._throttle_channel = 1
         self._steering_channel = 0
@@ -23,6 +23,7 @@ class Rover():
             rospy.loginfo(armResponse)
         except rospy.ServiceException as e:
             print("Service call failed: %s" %e)
+        time.sleep(1)
 
     def disarm(self):
         rospy.wait_for_service('/mavros/cmd/arming')
@@ -90,16 +91,17 @@ class Rover():
         self.rc_override.publish(msg)
 
 if __name__ == '__main__':
-
     myRover = Rover()
 
     print("Arming Rover...")
     myRover.arm()
-    while True:
-        print("Moving Forward")
-        try:
+
+    try:
+        print("Moving forward")
+        while True:
             myRover.move_forward(speed=myRover.speeds[2])
-        except KeyboardInterrupt:
-            print("Exiting...")
-            myRover.stop()
-            time.sleep(1)
+    except:
+        print("Exiting...")
+        myRover.stop()
+        time.sleep(1)
+            
