@@ -7,8 +7,8 @@ class Rover():
 
     def __init__(self) -> None:
 
-        # rospy.init_node('control_test', anonymous=True)
-        # self.rc_override = rospy.Publisher('mavros/rc/override', OverrideRCIn)
+        rospy.init_node('control_test', anonymous=True)
+        self.rc_override = rospy.Publisher('mavros/rc/override', OverrideRCIn)
 
         self._throttle_channel = 1
         self._steering_channel = 0
@@ -96,12 +96,38 @@ if __name__ == '__main__':
     print("Arming Rover...")
     myRover.arm()
 
-    try:
-        print("Moving forward")
-        while True:
-            myRover.move_forward(speed=myRover.speeds[2])
-    except:
-        print("Exiting...")
-        myRover.stop()
+    # try:
+    #     print("Moving forward")
+    #     while True:
+    #         myRover.move_forward(speed=myRover.speeds[2])
+    # except:
+    #     print("Exiting...")
+    #     myRover.stop()
+    #     time.sleep(1)
+    for i in range(5):
+        print("Moving forward...")
+        myRover.move_forward(speed=myRover.speeds[2])
         time.sleep(1)
-            
+    print("Stopping Rover")
+    myRover.stop()
+    time.sleep(1) 
+    for i in range(5):
+        print("Moving backward...")
+        myRover.move_backward(speed=myRover.speeds[2])
+        time.sleep(1)
+    print("Stopping Rover")
+    myRover.stop()
+    time.sleep(1) 
+    for i in range(5):
+        print("Rotating Right...")
+        myRover.rotate_right(speed=myRover.speeds[2])
+        time.sleep(1)
+    print("Stopping Rover")
+    myRover.stop()
+    time.sleep(1) 
+    for i in range(5):
+        print("Rotating Left...")
+        myRover.rotate_left(speed=myRover.speeds[2])
+        time.sleep(1)
+    print("Stopping Rover")
+    myRover.stop()        

@@ -12,17 +12,17 @@ class Rover():
         self.vehicle = connect(port, baud=57600, wait_ready=True)
 
     def arm(self):
-        while self.vehicle.is_armable != True:
-            print("Waiting for vehicle to become armable.")
-            time.sleep(self.rate)
-        print("Arming vehicle...")
+        # while self.vehicle.is_armable != True:
+        #     print("Waiting for vehicle to become armable.")
+        #     time.sleep(self.rate)
+        # print("Arming vehicle...")
 
-        self.vehicle.mode = VehicleMode("GUIDED")
+        self.vehicle.mode = VehicleMode("MANUAL")
 
-        while self.vehicle.mode != 'GUIDED':
-            print("Waiting for vehicle to enter Guided Mode.")
+        while self.vehicle.mode != 'MANUAL':
+            print("Waiting for vehicle to enter MANUAL Mode.")
             time.sleep(self.rate)
-        print("Vehicle is in GUIDED mode.")
+        print("Vehicle is in MANUAL mode.")
 
         self.vehicle.armed = True
         while self.vehicle.armed == False:
@@ -86,6 +86,7 @@ class Rover():
             while self.vehicle.mode != 'MANUAL':
                 time.sleep(self.rate)
 
+        print("Sending RC override signal")
         if self.current_speed == 'MEDIUM':
             self.vehicle.channels.overrides = {'2':1800}
         elif self.current_speed == 'FAST':
@@ -155,8 +156,11 @@ if __name__ == '__main__':
 
     try:
         print("Moving forward")
-        while True:
+        for i in range(10):
             myRover.manual_forward()
+            time.sleep(1)
+        print("Stopping vehicle...")
+        myRover.manual_stop()
     except:
         print("Exiting...")
         myRover.manual_stop()
